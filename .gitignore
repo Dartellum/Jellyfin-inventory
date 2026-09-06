@@ -1,0 +1,47 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables & secrets (NEVER commit live tokens!)
+.env
+*.env
+!.env.example
+
+# Real Excel Audit outputs (Keep personal library private)
+Jellyfin_Audit_List*.xlsx
+!sample_Jellyfin_Audit_List.xlsx
+
+# Duplicate / legacy scripts
+media_list (Copy).py
+media_list-with_overrides.py
+
+# Editor & OS files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
