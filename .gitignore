@@ -45,3 +45,7 @@ media_list-with_overrides.py
 .idea/
 *.swp
 *.swo
+
+# Local AI memory files
+AGENTS.md
+GEMINI.md
