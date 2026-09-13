@@ -34,6 +34,7 @@ env/
 # Real Excel Audit outputs (Keep personal library private)
 Jellyfin_Audit_List*.xlsx
 !sample_Jellyfin_Audit_List.xlsx
+.~lock.*.xlsx#
 
 # Duplicate / legacy scripts
 media_list (Copy).py
