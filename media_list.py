@@ -165,7 +165,7 @@ def analyze_tv_season_format(size_gb, ep_count=1):
             return "[DVD / SD]", "Recommendation: Upgrade to 1080p Blu-ray or 4K UHD"
         elif 1.0 <= size_gb <= 4.0:
             return "[1080p Encode / Web-DL]", "Recommendation: Upgrade to uncompressed 1080p Blu-ray (Remux) or 4K UHD"
-        elif 4.0 < size_gb <= 20.0:
+        elif 4.0 < size_gb <= 30.0:
             return "[1080p Blu-ray (Remux)]", "Optimal for TV (Most series cap at 1080p physical master)"
         else:
             return "[4K Ultra HD]", "Optimal (Max 4K quality achieved)"
@@ -177,7 +177,7 @@ def analyze_tv_season_format(size_gb, ep_count=1):
     elif 0.6 <= avg_ep_gb <= 3.0:
         current_fmt = "1080p Encode / Web-DL"
         rec = "Recommendation: Upgrade to uncompressed 1080p Blu-ray (Remux) or 4K UHD"
-    elif 3.0 < avg_ep_gb <= 12.0:
+    elif 3.0 < avg_ep_gb <= 22.0:
         current_fmt = "1080p Blu-ray (Remux)"
         rec = "Optimal for TV (Most series cap at 1080p physical master)"
     else:
