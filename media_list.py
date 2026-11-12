@@ -141,8 +141,12 @@ def analyze_format_and_upgrade(size_gb, is_tv=False, expected_seasons=1):
         else:
             rec = "Recommendation: Upgrade to 4K Ultra HD if a UHD disc exists"
     else:
-        current_fmt = "4K Ultra HD"
-        rec = "Optimal (Max 4K quality achieved)"
+        if is_tv:
+            current_fmt = "1080p Blu-ray (Remux)"
+            rec = "Optimal for TV (Most series cap at 1080p physical master)"
+        else:
+            current_fmt = "4K Ultra HD"
+            rec = "Optimal (Max 4K quality achieved)"
 
     return f"[{current_fmt}]", rec
 
@@ -463,6 +467,7 @@ def audit_tv_shows(existing_upcs={}):
                 or ""
             )
 
+            complete_series_idx = len(tv_data)
             tv_data.append({
                 "Series": display_series,
                 "Item/Season": "Complete Series",
@@ -598,6 +603,29 @@ def audit_tv_shows(existing_upcs={}):
                         "Recommendation": "Missing Season",
                         "UPC Code": s_upc
                     })
+
+            # Derive overall format and recommendation for Complete Series from actual detected seasons
+            series_season_rows = tv_data[complete_series_idx + 1:]
+            detected_fmts = [
+                r['Format Overall'] for r in series_season_rows
+                if r.get('Format Overall') not in ['-', '[ EMPTY FOLDER ]']
+            ]
+            if detected_fmts:
+                if any("[4K Ultra HD]" in f for f in detected_fmts):
+                    if all("[4K Ultra HD]" in f for f in detected_fmts):
+                        tv_data[complete_series_idx]["Format Overall"] = "[4K Ultra HD]"
+                    else:
+                        tv_data[complete_series_idx]["Format Overall"] = "[4K Ultra HD / 1080p Blu-ray]"
+                    tv_data[complete_series_idx]["Recommendation"] = "Optimal (Max 4K quality achieved)"
+                elif any("[1080p Blu-ray (Remux)]" in f for f in detected_fmts):
+                    tv_data[complete_series_idx]["Format Overall"] = "[1080p Blu-ray (Remux)]"
+                    tv_data[complete_series_idx]["Recommendation"] = "Optimal for TV (Most series cap at 1080p physical master)"
+                elif any("[1080p Encode / Web-DL]" in f for f in detected_fmts):
+                    tv_data[complete_series_idx]["Format Overall"] = "[1080p Encode / Web-DL]"
+                    tv_data[complete_series_idx]["Recommendation"] = "Recommendation: Upgrade to uncompressed 1080p Blu-ray (Remux) or 4K UHD"
+                elif any("[DVD / SD]" in f for f in detected_fmts):
+                    tv_data[complete_series_idx]["Format Overall"] = "[DVD / SD]"
+                    tv_data[complete_series_idx]["Recommendation"] = "Recommendation: Upgrade to 1080p Blu-ray or 4K UHD"
         else:
             unknown_upc = existing_upcs.get((clean_name, "Unrecognized Directory"), "")
             tv_data.append({
